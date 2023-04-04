@@ -1,0 +1,216 @@
+core.init: {0} Checking for fconfig files in pwd and ./rosetta/flags 
+core.init: {0} Rosetta version: PyRosetta4.conda.linux.CentOS.python36.Release r248 2020.10+release.46415fa 46415fa3e9decb8b6e91a4e065c15543eb27a461 http://www.pyrosetta.org 2020-03-05T09:09:24
+core.init: {0} command: PyRosetta -ex1 -ex2aro -database /net/software/worms/env/lib/python3.6/site-packages/pyrosetta/database
+basic.random.init_random_generator: {0} 'RNG device' seed mode, using '/dev/urandom', seed=-50324531 seed_offset=0 real_seed=-50324531 thread_index=0
+basic.random.init_random_generator: {0} RandomGenerator:init: Normal mode, seed=-50324531 RG_type=mt19937
+[ WARNING ] Resetting the global tracer options, which have already been set.
+[ WARNING ] This will not affect Tracers which are already initialized.
+core.init: {0} Checking for fconfig files in pwd and ./rosetta/flags 
+core.init: {0} Rosetta version: PyRosetta4.conda.linux.CentOS.python36.Release r248 2020.10+release.46415fa 46415fa3e9decb8b6e91a4e065c15543eb27a461 http://www.pyrosetta.org 2020-03-05T09:09:24
+core.init: {0} command: PyRosetta -mute all -beta -preserve_crystinfo --prevent_repacking -database /net/software/worms/env/lib/python3.6/site-packages/pyrosetta/database
+basic.random.init_random_generator: {0} 'RNG device' seed mode, using '/dev/urandom', seed=1861530193 seed_offset=0 real_seed=1861530193 thread_index=0
+basic.random.init_random_generator: {0} RandomGenerator:init: Normal mode, seed=1861530193 RG_type=mt19937
+PyRosetta-4 2020 [Rosetta PyRosetta4.conda.linux.CentOS.python36.Release 2020.10+release.46415fa3e9decb8b6e91a4e065c15543eb27a461 2020-03-05T09:09:24] retrieved from: http://www.pyrosetta.org
+(C) Copyright Rosetta Commons Member Institutions. Created in JHU by Sergey Lyskov and PyRosetta Team.
+RUNNING WORMS CWD /home/erinyang/projects/ph_plugs/manuscript/code_executable/01_fuse
+['/net/software/worms/worms/worms/__main__.py', '@worms_plug.flags', '--bbconn', '_C', 'C3_C', 'N_', 'Monomer', '--dbfiles', 'json/plug.json', '--output_prefix', 'output/']
+PyRosetta-4 2020 [Rosetta PyRosetta4.conda.linux.CentOS.python36.Release 2020.10+release.46415fa3e9decb8b6e91a4e065c15543eb27a461 2020-03-05T09:09:24] retrieved from: http://www.pyrosetta.org
+(C) Copyright Rosetta Commons Member Institutions. Created in JHU by Sergey Lyskov and PyRosetta Team.
+check_nc_linear: ['_C', 'N_']
+-------------- arg ---------------
+    loglevel INFO
+    geometry ['NullCriteria()']
+    bbconn ['_C', 'C3_C', 'N_', 'Monomer']
+    config_file []
+    null_base_names ['', '?', 'n/a', 'none']
+    nbblocks [64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64]
+    use_saved_bblocks 0
+    monte_carlo [0.0]
+    parallel 16
+    verbosity 2
+    precache_splices 1
+    precache_splices_and_quit 0
+    pbar 0
+    pbar_interval 10.0
+    context_structure 
+    cachedirs ['']
+    disable_cache 1
+    dbfiles ['json/plug.json']
+    dbroot 
+    load_poses 0
+    read_new_pdbs 0
+    run_cache 
+    merge_bblock None
+    no_duplicate_bases 1
+    shuffle_bblocks 1
+    only_merge_bblocks []
+    only_bblocks []
+    only_ivertex []
+    only_outputs []
+    bblock_ranges []
+    merge_segment None
+    min_seg_len 15
+    topology <worms.topology.Topology object at 0x7f724be0b0b8>
+    splice_rms_range 4
+    splice_max_rms 0.7
+    splice_clash_d2 12.25
+    splice_contact_d2 64.0
+    splice_clash_contact_range 40
+    splice_clash_contact_by_helix 1
+    splice_ncontact_cut 38
+    splice_ncontact_no_helix_cut 6
+    splice_nhelix_contacted_cut 3
+    splice_max_chain_length 99999
+    splice_min_dotz 0.0
+    tolerance 1.0
+    lever 25.0
+    min_radius 0.0
+    hash_cart_resl 1.0
+    hash_ori_resl 5.0
+    loose_hash_cart_resl 10.0
+    loose_hash_ori_resl 20.0
+    merged_err_cut 999.0
+    rms_err_cut 3.0
+    ca_clash_dis 3.0
+    disable_clash_check 0
+    max_linear 1000000
+    max_merge 100000
+    max_clash_check 10000
+    max_dock 100000
+    max_output 1000
+    max_score0 4.0
+    max_score0sym 9000000000.0
+    max_porosity 9000000000.0
+    max_com_redundancy 1.0
+    full_score0sym 0
+    output_from_pose 1
+    output_symmetric 1
+    output_prefix output/
+    output_centroid 0
+    output_only_AAAA 0
+    output_short_fnames 0
+    output_only_connected auto
+    cache_sync 0.003
+    postfilt_splice_max_rms 0.7
+    postfilt_splice_rms_length 9
+    postfilt_splice_ncontact_cut 40
+    postfilt_splice_ncontact_no_helix_cut 2
+    postfilt_splice_nhelix_contacted_cut 3
+    db (<worms.database.NoCacheBBlockDB object at 0x7f721c9bed30>, <worms.database.NoCacheSpliceDB object at 0x7f721c9bea58>)
+-----------------------------------
+NoCacheBBlockDB nentries: 2
+worms_main, 1 criteria, args:
+================== start job 0 ======================
+output_prefix: output/
+criteria: <worms.criteria.base.NullCriteria object at 0x7f721c9bec88>
+bbspec: [BBDir(bblockspec='C3_C', direction='_C'), BBDir(bblockspec='Monomer', direction='N_')]
+precaching splices
+reading pdb scaffolds/HFuse_pH192_3_0431_full.pdb
+core.init: {0} Checking for fconfig files in pwd and ./rosetta/flags 
+core.init: {0} Rosetta version: PyRosetta4.conda.linux.CentOS.python36.Release r248 2020.10+release.46415fa 46415fa3e9decb8b6e91a4e065c15543eb27a461 http://www.pyrosetta.org 2020-03-05T09:09:24
+core.init: {0} command: PyRosetta -ex1 -ex2aro -database /net/software/worms/env/lib/python3.6/site-packages/pyrosetta/database
+basic.random.init_random_generator: {0} 'RNG device' seed mode, using '/dev/urandom', seed=1681408658 seed_offset=0 real_seed=1681408658 thread_index=0
+basic.random.init_random_generator: {0} RandomGenerator:init: Normal mode, seed=1681408658 RG_type=mt19937
+[ WARNING ] Resetting the global tracer options, which have already been set.
+[ WARNING ] This will not affect Tracers which are already initialized.
+core.init: {0} Checking for fconfig files in pwd and ./rosetta/flags 
+core.init: {0} Rosetta version: PyRosetta4.conda.linux.CentOS.python36.Release r248 2020.10+release.46415fa 46415fa3e9decb8b6e91a4e065c15543eb27a461 http://www.pyrosetta.org 2020-03-05T09:09:24
+core.init: {0} command: PyRosetta -mute all -beta -preserve_crystinfo --prevent_repacking -database /net/software/worms/env/lib/python3.6/site-packages/pyrosetta/database
+basic.random.init_random_generator: {0} 'RNG device' seed mode, using '/dev/urandom', seed=-389600841 seed_offset=0 real_seed=-389600841 thread_index=0
+basic.random.init_random_generator: {0} RandomGenerator:init: Normal mode, seed=-389600841 RG_type=mt19937
+PyRosetta-4 2020 [Rosetta PyRosetta4.conda.linux.CentOS.python36.Release 2020.10+release.46415fa3e9decb8b6e91a4e065c15543eb27a461 2020-03-05T09:09:24] retrieved from: http://www.pyrosetta.org
+(C) Copyright Rosetta Commons Member Institutions. Created in JHU by Sergey Lyskov and PyRosetta Team.
+RUNNING WORMS CWD /home/erinyang/projects/ph_plugs/manuscript/code_executable/01_fuse
+['/net/software/worms/worms/worms/__main__.py', '@worms_plug.flags', '--bbconn', '_C', 'C3_C', 'N_', 'Monomer', '--dbfiles', 'json/plug.json', '--output_prefix', 'output/']
+PyRosetta-4 2020 [Rosetta PyRosetta4.conda.linux.CentOS.python36.Release 2020.10+release.46415fa3e9decb8b6e91a4e065c15543eb27a461 2020-03-05T09:09:24] retrieved from: http://www.pyrosetta.org
+(C) Copyright Rosetta Commons Member Institutions. Created in JHU by Sergey Lyskov and PyRosetta Team.
+check_nc_linear: ['_C', 'N_']
+-------------- arg ---------------
+    loglevel INFO
+    geometry ['NullCriteria()']
+    bbconn ['_C', 'C3_C', 'N_', 'Monomer']
+    config_file []
+    null_base_names ['', '?', 'n/a', 'none']
+    nbblocks [64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64]
+    use_saved_bblocks 0
+    monte_carlo [0.0]
+    parallel 16
+    verbosity 2
+    precache_splices 1
+    precache_splices_and_quit 0
+    pbar 0
+    pbar_interval 10.0
+    context_structure 
+    cachedirs ['']
+    disable_cache 1
+    dbfiles ['json/plug.json']
+    dbroot 
+    load_poses 0
+    read_new_pdbs 0
+    run_cache 
+    merge_bblock None
+    no_duplicate_bases 1
+    shuffle_bblocks 1
+    only_merge_bblocks []
+    only_bblocks []
+    only_ivertex []
+    only_outputs []
+    bblock_ranges []
+    merge_segment None
+    min_seg_len 15
+    topology <worms.topology.Topology object at 0x7f7dc4f82358>
+    splice_rms_range 4
+    splice_max_rms 0.7
+    splice_clash_d2 12.25
+    splice_contact_d2 64.0
+    splice_clash_contact_range 40
+    splice_clash_contact_by_helix 1
+    splice_ncontact_cut 38
+    splice_ncontact_no_helix_cut 6
+    splice_nhelix_contacted_cut 3
+    splice_max_chain_length 99999
+    splice_min_dotz 0.0
+    tolerance 1.0
+    lever 25.0
+    min_radius 0.0
+    hash_cart_resl 1.0
+    hash_ori_resl 5.0
+    loose_hash_cart_resl 10.0
+    loose_hash_ori_resl 20.0
+    merged_err_cut 999.0
+    rms_err_cut 3.0
+    ca_clash_dis 3.0
+    disable_clash_check 0
+    max_linear 1000000
+    max_merge 100000
+    max_clash_check 10000
+    max_dock 100000
+    max_output 1000
+    max_score0 4.0
+    max_score0sym 9000000000.0
+    max_porosity 9000000000.0
+    max_com_redundancy 1.0
+    full_score0sym 0
+    output_from_pose 1
+    output_symmetric 1
+    output_prefix output/
+    output_centroid 0
+    output_only_AAAA 0
+    output_short_fnames 0
+    output_only_connected auto
+    cache_sync 0.003
+    postfilt_splice_max_rms 0.7
+    postfilt_splice_rms_length 9
+    postfilt_splice_ncontact_cut 40
+    postfilt_splice_ncontact_no_helix_cut 2
+    postfilt_splice_nhelix_contacted_cut 3
+    db (<worms.database.NoCacheBBlockDB object at 0x7f7d95b54d30>, <worms.database.NoCacheSpliceDB object at 0x7f7d95b54a58>)
+-----------------------------------
+NoCacheBBlockDB nentries: 2
+worms_main, 1 criteria, args:
+================== start job 0 ======================
+output_prefix: output/
+criteria: <worms.criteria.base.NullCriteria object at 0x7f7d95b54c88>
+bbspec: [BBDir(bblockspec='C3_C', direction='_C'), BBDir(bblockspec='Monomer', direction='N_')]
+precaching splices
+reading pdb scaffolds/HFuse_pH192_3_0431_full.pdb

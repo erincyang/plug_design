@@ -1,0 +1,163 @@
+<ROSETTASCRIPTS>
+	<SCOREFXNS>
+		<ScoreFunction name="sfxn_hard" weights="beta" symmetric="1" >
+		</ScoreFunction>
+		<ScoreFunction name="sfxn_soft" weights="beta_soft" symmetric="1" >
+		</ScoreFunction>
+		<ScoreFunction name="sfxn_up_ele" weights="beta" symmetric="1" >
+			<Reweight scoretype="fa_elec" weight="1.4" />
+			<Reweight scoretype="hbond_sc" weight="2.0" />
+		</ScoreFunction>
+		<ScoreFunction name="sfxn_clean" weights="beta" symmetric="1" />
+	</SCOREFXNS>
+
+	<RESIDUE_SELECTORS>		
+		//select unpaired CYS
+		<ResidueName name="all_cys" residue_name3="CYS" />
+			<Not name="not_cys" selector="all_cys" />
+		<ResidueName name="free_cys" residue_names="CYS" />
+		<ResiduePDBInfoHasLabel name="was_free_cys" property="free_cys" />
+			<Not name="not_free_cys" selector="free_cys" />
+			<And name="disulf" selectors="all_cys,not_free_cys" />		
+
+		//select with "resfile"
+		<Index name="design_resi_index" resnums="%%resnum%%" error_on_out_of_bounds_index="true" />
+		<Or name="design_resis_and_free_cys" selectors="design_resi_index,was_free_cys" />
+		<ResidueName name="PG" residue_name3="PRO,GLY" /> //selects CPG residues
+		<Or name="CPG" selectors="disulf,PG" />
+			<Not name="not_CPG" selector="CPG" />
+		<And name="design_resis_resfile" selectors="not_CPG,design_resis_and_free_cys" />
+
+		//select new "interface"
+		Index name="chunkA" resnums="1-%%jct_res%%" error_on_out_of_bounds_index="true" />
+			SymmetricalResidue name="chunkA_sym" selector="chunkA" />
+		Index name="chunkB" resnums="%%jct_res%%-%%end_res%%" error_on_out_of_bounds_index="true" />
+			SymmetricalResidue name="chunkB_sym" selector="chunkB" />
+		InterfaceByVector name="interface_AB" cb_dist_cut="11" nearby_atom_cut="5.5" vector_angle_cut="75.0" vector_dist_cut="9.0" grp1_selector="chunkA" grp2_selector="chunkB" />
+		InterfaceByVector name="interface_BA" cb_dist_cut="11" nearby_atom_cut="5.5" vector_angle_cut="75.0" vector_dist_cut="9.0" grp1_selector="chunkB" grp2_selector="chunkA" />
+			Or name="interface" selectors="interface_AB,interface_BA" />
+		
+		Or name="design_resis_base" selectors="design_resis_resfile,interface" />
+		<Or name="design_resis_base" selectors="design_resis_resfile" />
+		<SymmetricalResidue name="design_resis_base_sym" selector="design_resis_base" />
+		<CloseContact name="design_resis" residue_selector="design_resis_base_sym" contact_threshold="1" /> //catch horrible clashes?
+		<Neighborhood name="pack_resis" selector="design_resis" distance="10" include_focus_in_subset="false" />
+		<Or name="design_and_pack_resis" selectors="design_resis,pack_resis" />
+		<Not name="lock_resis" selector="design_and_pack_resis" />
+
+		//layer design
+		<Layer name="core" use_sidechain_neighbors="true" core_cutoff="4.9" surface_cutoff="2.7" sc_neighbor_dist_exponent="0.7" select_core="true" />
+		<Layer name="bdry" use_sidechain_neighbors="true" core_cutoff="4.9" surface_cutoff="2.7" sc_neighbor_dist_exponent="0.7" select_boundary="true" />		
+		<Layer name="surf" use_sidechain_neighbors="true" core_cutoff="4.9" surface_cutoff="2.7" sc_neighbor_dist_exponent="0.7" select_surface="true" />
+		<SecondaryStructure name="helix" ss="H" overlap="0" minH="3" minE="3" use_dssp="true" include_terminal_loops="false" />
+        <SecondaryStructure name="sheet" ss="E" overlap="0" minH="3" minE="3" use_dssp="true" include_terminal_loops="false" />
+        <SecondaryStructure name="loop"	 ss="L" overlap="0" minH="3" minE="3" use_dssp="true" include_terminal_loops="true" />
+        
+        <Or name="HorE" selectors="helix,sheet" />
+        <And name="coreH" selectors="core,HorE" />
+        <And name="bdryH" selectors="bdry,HorE" />
+        <And name="surfH" selectors="surf,HorE" />
+        <And name="coreL" selectors="core,loop" />
+        <And name="bdryL" selectors="bdry,loop" />
+        <And name="surfL" selectors="surf,loop" />
+        
+        //filters
+		<And name="uhb_resis" selectors="coreH,design_resis" />
+	</RESIDUE_SELECTORS>
+
+	<TASKOPERATIONS>
+		<IncludeCurrent name="ic" />									//includes input pdb's rotamers
+		<LimitAromaChi2 name="limitaro" chi2max="110" chi2min="70" />	//disallow extreme aromatic rotamers
+		<RestrictToRepacking name="repack_only" />						//for minimize/repack
+		<ExtraRotamersGeneric name="ex1_ex2" ex1="1" ex2="1" />			//use ex1 ex2 rotamers
+
+		//layer design with SS
+		<OperateOnResidueSubset name="layer_core_H" selector="coreH" >
+			<RestrictAbsentCanonicalAASRLT aas="ILVAMF" /> </OperateOnResidueSubset> 		//disallow:  W,YH,CPG,DENQKR, ,   ,ST
+		<OperateOnResidueSubset name="layer_bdry_H" selector="bdryH" >
+			<RestrictAbsentCanonicalAASRLT aas="ILVAMSTFWY" /> </OperateOnResidueSubset>	//disallow:     H,CPG,DENQKR, ,   ,
+		<OperateOnResidueSubset name="layer_surf_H" selector="surfH" >
+			<RestrictAbsentCanonicalAASRLT aas="ASTDENQKR" /> </OperateOnResidueSubset>		//disallow: FW,YH,CPG,      ,M,ILV,		
+		
+		<OperateOnResidueSubset name="layer_core_L" selector="coreL" >
+			<RestrictAbsentCanonicalAASRLT aas="PGILVAMF" /> </OperateOnResidueSubset> 		//disallow:  W,YH,C  ,DENQKR, ,   ,ST
+		<OperateOnResidueSubset name="layer_bdry_L" selector="bdryL" >  
+			<RestrictAbsentCanonicalAASRLT aas="PGILVAMSTFWY" /> </OperateOnResidueSubset>	//disallow:     H,C  ,DENQKR, ,   ,
+		<OperateOnResidueSubset name="layer_surf_L" selector="surfL" >  
+			<RestrictAbsentCanonicalAASRLT aas="PGASTDENQKR" /> </OperateOnResidueSubset>	//disallow: FW,YH,C  ,      ,M,ILV,
+			
+		<OperateOnResidueSubset name="lock_CPG" selector="CPG" >
+			<PreventRepackingRLT/> </OperateOnResidueSubset>
+					
+		//pack and lock
+		<OperateOnResidueSubset name="design_task" selector="design_resis" >
+			<RestrictAbsentCanonicalAASRLT aas="FWYHCPGDENQKRMILVSTA" /> </OperateOnResidueSubset>
+		<OperateOnResidueSubset name="pack_task" selector="pack_resis" >
+			<RestrictToRepackingRLT/> </OperateOnResidueSubset>
+		<OperateOnResidueSubset name="lock_task" selector="lock_resis" >
+			<PreventRepackingRLT/> </OperateOnResidueSubset>
+	
+		//pack_bdry, polar_design_bdry, lock_core
+		<OperateOnResidueSubset name="layer_polar_bdry_H" selector="bdryH" >
+			<RestrictAbsentCanonicalAASRLT aas="STNQY" /> </OperateOnResidueSubset>			//disallow:  FW, H,CPG,DE  KR,M,ILV,  ,A
+		<OperateOnResidueSubset name="layer_polar_bdry_L" selector="bdryL" >  
+			<RestrictAbsentCanonicalAASRLT aas="PGSTNQY" /> </OperateOnResidueSubset>		//disallow:  FW, H,C  ,DE  KR,M,ILV,  ,A
+		<OperateOnResidueSubset name="lock_core" selector="core" >
+			<PreventRepackingRLT/> </OperateOnResidueSubset>
+	</TASKOPERATIONS>
+
+	<MOVERS>
+		<SymDofMover name="symmetrize" symm_file="%%symdef%%" sym_dof_names="JS1" />
+		<AddResidueLabel name="add_label_design" residue_selector="design_resis" label="design_resis" />
+		<AddResidueLabel name="add_label_free_cys" residue_selector="free_cys" label="was_free_cys" />
+		<AddCompositionConstraintMover name="add_aa_comp" filename="input/aa_comp.comp" selector="design_resis" />
+		
+		<SymPackRotamersMover name="design_soft" scorefxn="sfxn_soft"	task_operations="layer_core_H,layer_bdry_H,layer_surf_H,layer_core_L,layer_bdry_L,layer_surf_L,pack_task,lock_task,lock_CPG,ic,limitaro,ex1_ex2" />
+		<SymPackRotamersMover name="design_hard" scorefxn="sfxn_hard"	task_operations="layer_core_H,layer_bdry_H,layer_surf_H,layer_core_L,layer_bdry_L,layer_surf_L,pack_task,lock_task,lock_CPG,ic,limitaro,ex1_ex2" />
+		<SymPackRotamersMover name="design_surf" scorefxn="sfxn_up_ele"	task_operations="lock_core,layer_polar_bdry_H,layer_polar_bdry_L,layer_surf_H,layer_surf_L,pack_task,lock_task,lock_CPG,ic,limitaro,ex1_ex2" />
+		
+		<TaskAwareSymMinMover name="minimize_soft" scorefxn="sfxn_soft" bb="0" chi="1" rb="0" task_operations="design_task,pack_task,lock_task,lock_CPG,ic,limitaro" /> //bb=backbone, chi=sidechain
+		<TaskAwareSymMinMover name="minimize_hard" scorefxn="sfxn_hard" bb="0" chi="1" rb="0" task_operations="design_task,pack_task,lock_task,lock_CPG,ic,limitaro" /> //bb=backbone, chi=sidechain
+		<SymPackRotamersMover name="repack" scorefxn="sfxn_clean" task_operations="design_task,pack_task,lock_task,lock_CPG,ic,limitaro,ex1_ex2,repack_only" />
+
+		<ParsedProtocol name="relax" >
+			<Add mover="minimize_soft" />
+			<Add mover="repack" />
+			<Add mover="minimize_hard" />
+		</ParsedProtocol>
+
+	</MOVERS>
+
+	<FILTERS>
+		<BuriedUnsatHbonds name="uhb" scorefxn="sfxn_clean" cutoff="1" use_sc_neighbors="false" use_reporter_behavior="true" report_all_heavy_atom_unsats="true" ignore_surface_res="true" print_out_info_to_pdb="true" residue_selector="uhb_resis" confidence="0" />
+		ShapeComplementarity name="sc" min_sc="0.5" verbose="1" quick="0" residue_selector1="chunkA_sym" residue_selector2="chunkB_sym" write_int_area="1" confidence="0" />
+		<ResidueCount name="ala_count" max_residue_count="50" min_residue_count="0" residue_types="ALA" count_as_percentage="1" residue_selector="design_resis" confidence="0" />
+		<ClashCheck name="clash_check_1comp" nsub_bblock="%%nsub_bb%%" verbose="1" write2pdb="1" cutoff="5" confidence="1" />
+		<ScoreType name="farep_filter" score_type="fa_rep"
+        threshold="200000" scorefxn="sfxn_clean" confidence="1" />
+
+	</FILTERS>
+
+	
+	<PROTOCOLS>		
+		<Add mover_name="symmetrize" />
+		<Add mover_name="add_label_design" />
+		<Add mover_name="add_label_free_cys" />
+		<Add mover_name="add_aa_comp" />
+		<Add mover_name="design_soft" />
+		<Add mover_name="relax" />
+		<Add mover_name="design_hard" />
+		<Add mover_name="relax" />
+		<Add mover_name="design_surf" />
+		<Add mover_name="relax" />
+		//filters
+		<Add filter_name="uhb" />
+		Add filter_name="sc" />
+		<Add filter_name="ala_count" />
+		<Add filter_name="clash_check_1comp" />
+		<Add filter_name="farep_filter" />
+
+	</PROTOCOLS>
+	
+	<OUTPUT scorefxn="sfxn_clean" />
+</ROSETTASCRIPTS>

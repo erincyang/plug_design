@@ -1,0 +1,27 @@
+[
+ {"file": "scaffolds/HFuse_pH192_3_0431_full.pdb",
+  "name": "HFuse_pH192_3_0431_full",
+  "class": ["C3_C"],
+  "type": "HFuse_C3_C",
+  "base": "ph192",
+  "components": ["DHR59"],
+  "validated": false,
+  "protocol": "Hfuse",
+  "connections": [
+   {"chain": 1, "direction": "C", "residues": ["138:"]}
+  ]
+ },
+ {"file": "scaffolds/EXT6-DHR4.pdb",
+  "name": "EXT6-DHR4",
+  "class": ["Monomer"],
+  "type": "Monomer",
+  "base": "EXT6-DHR4.pdb",
+  "components": ["EXT6-DHR4.pdb"],
+  "validated": false,
+  "protocol": [""],
+  "connections": [
+   {"chain": 1, "direction": "N", "residues": [":50"]},
+   {"chain": 1, "direction": "C", "residues": ["-197:"]}
+  ]
+ }
+]
